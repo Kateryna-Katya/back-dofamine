@@ -11,7 +11,13 @@ import { seedAdmin } from './db/seedAdmin.js';
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+const corsOptions = {
+  origin: true, // автоматически вернёт тот Origin, который пришёл (GitHub Pages / домен заказчика / localhost)
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // <-- ключевое: отвечает на preflight
 app.use(express.json());
 
 // healthcheck
