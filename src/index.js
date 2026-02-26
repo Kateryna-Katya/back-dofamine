@@ -12,12 +12,13 @@ dotenv.config();
 
 const app = express();
 const corsOptions = {
-  origin: true, // автоматически вернёт тот Origin, который пришёл (GitHub Pages / домен заказчика / localhost)
+  origin: true,
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
+
 app.use(cors(corsOptions));
-app.options(cors(corsOptions)); // <-- ключевое: отвечает на preflight
+app.options(/.*/, cors(corsOptions)); // ✅ вместо '*'
 app.use(express.json());
 
 // healthcheck
