@@ -6,6 +6,7 @@ import routes from './routes/index.js';
 import { connectDB } from './config/db.js';
 import { errorMiddleware } from './middleware/error.middleware.js';
 import { migrate } from './db/migrate.js';
+import { seedAdmin } from './db/seedAdmin.js';
 
 dotenv.config();
 
@@ -34,6 +35,10 @@ const port = Number(process.env.PORT) || 5050;
     if (process.env.RUN_MIGRATIONS === 'true') {
       await migrate();
       console.log('DB migrated ✅');
+    }
+
+    if (process.env.SEED_ADMIN === 'true') {
+      await seedAdmin();
     }
 
     app.listen(port, '0.0.0.0', () => {
