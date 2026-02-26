@@ -34,3 +34,5 @@ const port = Number(process.env.PORT) || 5050;
     process.exit(1);
   }
 })();
+console.log('HOST:', process.env.DB_HOST);
+console.log('PORT:', process.env.DB_PORT);
