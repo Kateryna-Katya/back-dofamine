@@ -11,7 +11,14 @@ export const db = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  ...(useSSL ? { ssl: { rejectUnauthorized: true } } : {}),
+  ...(useSSL
+    ? {
+        ssl: {
+          rejectUnauthorized: true,
+          ca: process.env.DB_CA_CERT,
+        },
+      }
+    : {}),
 });
 
 export const connectDB = () => {
