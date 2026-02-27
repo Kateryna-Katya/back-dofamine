@@ -16,6 +16,8 @@ const allowedOrigins = [
   'https://kateryna-katya.github.io',
   'http://localhost:5173',
   'http://127.0.0.1:5173',
+  'https://catharsis-farm.com',
+  'https://www.catharsis-farm.com',
 ];
 
 const corsOptions = {
