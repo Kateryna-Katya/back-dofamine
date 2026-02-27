@@ -11,14 +11,32 @@ import { seedAdmin } from './db/seedAdmin.js';
 dotenv.config();
 
 const app = express();
+
+const allowedOrigins = [
+  'https://kateryna-katya.github.io',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+];
+
 const corsOptions = {
-  origin: true,
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true);
+    if (allowedOrigins.includes(origin)) return cb(null, true);
+    return cb(new Error(`CORS blocked for origin: ${origin}`));
+  },
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: false,
 };
 
 app.use(cors(corsOptions));
-app.options(/.*/, cors(corsOptions)); // ✅ вместо '*'
+app.options(/.*/, cors(corsOptions));
+
+app.use((req, res, next) => {
+  res.header('Vary', 'Origin');
+  next();
+});
+
 app.use(express.json());
 
 // healthcheck
@@ -27,7 +45,7 @@ app.get('/', (req, res) => res.json({ message: 'Backend works 🚀' }));
 // API
 app.use('/api', routes);
 
-// errors
+// errors (завжди в кінці)
 app.use(errorMiddleware);
 
 const port = Number(process.env.PORT) || 5050;
