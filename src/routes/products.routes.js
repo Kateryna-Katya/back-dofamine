@@ -9,11 +9,10 @@ import {
 
 const router = Router();
 
-router.use(requireAuth, requireAdmin);
-
-router.get('/', listProducts);
-router.post('/', createProduct);
-router.patch('/:id', updateProduct);
-router.delete('/:id', deleteProduct);
+// ✅ не используем router.use(requireAuth...) чтобы не ломать OPTIONS
+router.get('/', requireAuth, requireAdmin, listProducts);
+router.post('/', requireAuth, requireAdmin, createProduct);
+router.patch('/:id', requireAuth, requireAdmin, updateProduct);
+router.delete('/:id', requireAuth, requireAdmin, deleteProduct);
 
 export default router;

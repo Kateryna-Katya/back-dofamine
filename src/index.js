@@ -27,34 +27,23 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: false,
+  maxAge: 86400,
 };
 
 app.use(cors(corsOptions));
-app.options(/.*/, cors(corsOptions));
-
-app.use((req, res, next) => {
-  res.header('Vary', 'Origin');
-  next();
-});
-
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
-// healthcheck
 app.get('/', (req, res) => res.json({ message: 'Backend works 🚀' }));
 
-// API
 app.use('/api', routes);
 
-// errors (завжди в кінці)
 app.use(errorMiddleware);
 
 const port = Number(process.env.PORT) || 5050;
 
 (async () => {
   try {
-    console.log('DB_HOST:', process.env.DB_HOST);
-    console.log('DB_PORT:', process.env.DB_PORT);
-
     await connectDB();
 
     if (process.env.RUN_MIGRATIONS === 'true') {
